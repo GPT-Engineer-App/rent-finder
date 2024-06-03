@@ -93,15 +93,20 @@ const Index = () => {
   return (
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={4} width="100%">
-        <HStack spacing={4}>
-          <Button colorScheme="teal" onClick={() => setIsUserInterface(true)}>
-            User Interface
-          </Button>
-          <Button colorScheme="teal" onClick={() => setIsUserInterface(false)}>
-            Customer Interface
-          </Button>
-        </HStack>
-        {isUserInterface ? <UserInterface rooms={rooms} filters={filters} setFilters={setFilters} /> : <CustomerInterface addRoom={addRoom} />}
+        <Box bg="teal.500" w="100%" p={4} color="white" textAlign="center">
+          <HStack spacing={4} justify="center">
+            <Button colorScheme="teal" variant="solid">
+              Button 1
+            </Button>
+            <Button colorScheme="teal" variant="solid">
+              Button 2
+            </Button>
+            <Button colorScheme="teal" variant="solid">
+              Button 3
+            </Button>
+          </HStack>
+        </Box>
+        <UserInterface rooms={rooms} filters={filters} setFilters={setFilters} />
       </VStack>
     </Container>
   );
