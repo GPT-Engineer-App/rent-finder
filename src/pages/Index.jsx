@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Container, Text, VStack, HStack, Button, Input, Box, Image, IconButton, SimpleGrid, Select } from "@chakra-ui/react";
+import { Container, VStack, Box, HStack, Input, IconButton, SimpleGrid, Select, Button, Image, Text } from "@chakra-ui/react";
+import Navigation from "../components/Navigation.jsx";
 import { FaPlus, FaSearch } from "react-icons/fa";
 
 const roomsData = [
@@ -93,19 +94,7 @@ const Index = () => {
   return (
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={4} width="100%">
-        <Box bg="teal.500" w="100%" p={4} color="white" textAlign="center">
-          <HStack spacing={4} justify="center">
-            <Button colorScheme="teal" variant="solid">
-              Button 1
-            </Button>
-            <Button colorScheme="teal" variant="solid">
-              Button 2
-            </Button>
-            <Button colorScheme="teal" variant="solid">
-              Button 3
-            </Button>
-          </HStack>
-        </Box>
+        <Navigation />
         <UserInterface rooms={rooms} filters={filters} setFilters={setFilters} />
       </VStack>
     </Container>
