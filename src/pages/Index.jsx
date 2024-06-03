@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Text, VStack, HStack, Button, Input, Box, Image, IconButton, SimpleGrid } from "@chakra-ui/react";
+import { Container, Text, VStack, HStack, Button, Input, Box, Image, IconButton, SimpleGrid, Select } from "@chakra-ui/react";
 import { FaPlus, FaSearch } from "react-icons/fa";
 
 const roomsData = [
@@ -22,19 +22,39 @@ const RoomCard = ({ room }) => (
   </Box>
 );
 
-const UserInterface = ({ rooms }) => (
-  <VStack spacing={4} align="stretch">
-    <HStack>
-      <Input placeholder="Search for rooms..." />
-      <IconButton aria-label="Search" icon={<FaSearch />} />
-    </HStack>
-    <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={5}>
-      {rooms.map((room) => (
-        <RoomCard key={room.id} room={room} />
-      ))}
-    </SimpleGrid>
-  </VStack>
-);
+const UserInterface = ({ rooms, filters, setFilters }) => {
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const filteredRooms = rooms.filter((room) => {
+    return (!filters.area || room.area.includes(filters.area)) && (!filters.rent || room.rent <= filters.rent) && (!filters.size || room.size >= filters.size) && (!filters.quantity || room.quantity >= filters.quantity);
+  });
+
+  return (
+    <VStack spacing={4} align="stretch">
+      <HStack>
+        <Input placeholder="Search for rooms..." />
+        <IconButton aria-label="Search" icon={<FaSearch />} />
+      </HStack>
+      <HStack>
+        <Select placeholder="Select area" name="area" onChange={handleFilterChange}>
+          <option value="city center">City Center</option>
+          <option value="suburbs">Suburbs</option>
+        </Select>
+        <Input placeholder="Max Rent" name="rent" type="number" onChange={handleFilterChange} />
+        <Input placeholder="Min Size" name="size" type="number" onChange={handleFilterChange} />
+        <Input placeholder="Min Room Quantity" name="quantity" type="number" onChange={handleFilterChange} />
+      </HStack>
+      <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={5}>
+        {filteredRooms.map((room) => (
+          <RoomCard key={room.id} room={room} />
+        ))}
+      </SimpleGrid>
+    </VStack>
+  );
+};
 
 const CustomerInterface = ({ addRoom }) => {
   const [title, setTitle] = useState("");
@@ -64,6 +84,8 @@ const Index = () => {
   const [rooms, setRooms] = useState(roomsData);
   const [isUserInterface, setIsUserInterface] = useState(true);
 
+  const [filters, setFilters] = useState({ area: "", rent: "", size: "", quantity: "" });
+
   const addRoom = (room) => {
     setRooms([...rooms, room]);
   };
@@ -79,7 +101,7 @@ const Index = () => {
             Customer Interface
           </Button>
         </HStack>
-        {isUserInterface ? <UserInterface rooms={rooms} /> : <CustomerInterface addRoom={addRoom} />}
+        {isUserInterface ? <UserInterface rooms={rooms} filters={filters} setFilters={setFilters} /> : <CustomerInterface addRoom={addRoom} />}
       </VStack>
     </Container>
   );
